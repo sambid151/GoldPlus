@@ -2,6 +2,8 @@
 
 Private Bhubaneswar gold-rate tracker (24K, 22K, 18K) for personal use on your own computer: today's rate, daily change, history tables, interactive charts, news, and a jewellery price calculator. Next.js 16, TypeScript, Tailwind v4, Recharts.
 
+**About this repo:** a personal project, shared publicly for reference only. It contains no rate data, is not affiliated with any rate website, and no licence is granted for reuse. Use at your own risk; it is not investment advice.
+
 **Personal use only.** The rate pages you copy from (e.g. Goodreturns) allow personal, non-commercial use, not republishing. GoldPulse runs locally, never scrapes, and refuses to run its entry screen on a hosted deployment.
 
 ## Daily workflow (free, no accounts)
@@ -17,6 +19,8 @@ Entries are validated: no future dates, positive plausible prices, karat prices 
 CSV format: header `date,24K,22K,18K`; dates as `2026-11-16`, `16/11/2026` or `Nov 16, 2026`; Indian digit grouping (`"13,680"`) is fine. The JSON export can be re-imported too. A date repeated inside one file is reported and the last row wins.
 
 Data lives in `.data/goldpulse.json` (override with `GOLDPULSE_DATA_FILE`). Back it up with the export button or by copying the file.
+
+Backups: `npm run backup` copies the data file to `.data/backups/` (timestamped, newest 30 kept, original untouched). Run it before big imports or deletes.
 
 Data-safety notes: writes go to a temp file and are renamed into place, a corrupt data file is never overwritten (the screen shows an error instead), and deletes need a second click. Exports contain daily prices only (not the change-detection snapshots or ingest state). Saving or importing a date that already exists **replaces** it (the preview says so). Do not run `npm run poll`/`ingest` while saving from the screen: the two processes do not lock each other.
 

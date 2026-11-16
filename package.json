@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
+    "backup": "node scripts/backup.mjs",
     "poll": "tsx --env-file-if-exists=.env.local scripts/poll.ts",
     "ingest": "tsx --env-file-if-exists=.env.local scripts/poll.ts --once"
   },
