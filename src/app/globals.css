@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* GoldPulse design tokens — white + green, "grows upward".
+   Text-on-white greens use --brand-strong (>= 4.5:1). Light is default; dark is paired. */
+:root {
+  --bg: #ffffff;
+  --surface: #f5f8f6;
+  --surface-2: #e9f3ec;
+  --ink: #0b2415;
+  --muted: #4a6355;
+  --line: #d6e8db;
+  --brand: #16a34a;
+  --brand-strong: #166534;
+  --brand-soft: #dcf3e2;
+  --brand-wash: #effaf1;
+  --up: #166534;
+  --down: #b45309;
+  --down-soft: #fdf1e0;
+  --warn-bg: #fff7e0;
+  --warn-ink: #7a4b00;
+  --shadow: 0 1px 2px rgb(11 36 21 / 0.05), 0 8px 24px -12px rgb(11 36 21 / 0.12);
+  /* chart series: distinguishable by dash + shape as well as colour */
+  --c24: #14532d;
+  --c22: #16a34a;
+  --c18: #4d7c0f;
+  --grid: #e3efe6;
+  /* deep-green bands (hero, calculator, footer) */
+  --band-from: #14532d;
+  --band-to: #167a3a;
+  --on-band: #ffffff;
+  --on-band-muted: #e3f5e8;
+  --on-band-accent: #c9f7d8;
+  /* solid buttons / selected chips, with text colours that pass contrast in both themes */
+  --action: #166534;
+  --on-action: #ffffff;
+  --danger: #b45309;
+  --on-danger: #ffffff;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #07130c;
+  --surface: #0c1d13;
+  --surface-2: #11281a;
+  --ink: #e9f6ee;
+  --muted: #9bb7a6;
+  --line: #1f3b2a;
+  --brand: #4ade80;
+  --brand-strong: #86efac;
+  --brand-soft: #14341f;
+  --brand-wash: #0a2113;
+  --up: #4ade80;
+  --down: #fbbf24;
+  --down-soft: #3a2a0a;
+  --warn-bg: #3a2c08;
+  --warn-ink: #fcd34d;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --c24: #bbf7d0;
+  --c22: #4ade80;
+  --c18: #a3e635;
+  --grid: #1c3727;
+  --band-from: #0a2616;
+  --band-to: #14532d;
+  --action: #4ade80;
+  --on-action: #04210f;
+  --danger: #fbbf24;
+  --on-danger: #1f1300;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07130c;
+    --surface: #0c1d13;
+    --surface-2: #11281a;
+    --ink: #e9f6ee;
+    --muted: #9bb7a6;
+    --line: #1f3b2a;
+    --brand: #4ade80;
+    --brand-strong: #86efac;
+    --brand-soft: #14341f;
+    --brand-wash: #0a2113;
+    --up: #4ade80;
+    --down: #fbbf24;
+    --down-soft: #3a2a0a;
+    --warn-bg: #3a2c08;
+    --warn-ink: #fcd34d;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --c24: #bbf7d0;
+    --c22: #4ade80;
+    --c18: #a3e635;
+    --grid: #1c3727;
+    --band-from: #0a2616;
+    --band-to: #14532d;
+    --action: #4ade80;
+    --on-action: #04210f;
+    --danger: #fbbf24;
+    --on-danger: #1f1300;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-wash: var(--brand-wash);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --color-down-soft: var(--down-soft);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-ink: var(--warn-ink);
+  --color-on-band: var(--on-band);
+  --color-on-band-muted: var(--on-band-muted);
+  --color-on-band-accent: var(--on-band-accent);
+  --color-action: var(--action);
+  --color-on-action: var(--on-action);
+  --color-danger: var(--danger);
+  --color-on-danger: var(--on-danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --shadow-card: var(--shadow);
+}
+
+html {
+  -webkit-tap-highlight-color: rgb(22 163 74 / 0.18);
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+a, button, input, summary {
+  touch-action: manipulation;
+}
+
+.band {
+  background-image: linear-gradient(160deg, var(--band-from) 0%, var(--band-to) 100%);
+}
+
+/* Scroll containers must also contain absolutely positioned descendants (the .sr-only labels inside tables). */
+.overflow-x-auto {
+  position: relative;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Upward-growth motion: bars scale up from their base, content eases up into place. */
+@keyframes grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+.grow-y {
+  transform-origin: bottom;
+  animation: grow-y 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.rise-in {
+  animation: rise-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--brand-soft) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 0.5rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .grow-y, .rise-in, .skeleton { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
