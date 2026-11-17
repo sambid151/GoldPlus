@@ -67,7 +67,7 @@ export async function runIngest({ provider, repo, now = () => new Date() }: Deps
     await repo.upsertDailyCloses([
       ...backfillRows,
       ...current.map((r) => ({
-        karat: r.karat, date: r.date, pricePerGram: r.pricePerGram, source: r.source,
+        karat: r.karat, date: r.date, pricePerGram: r.pricePerGram, source: r.source, updatedAt: r.fetchedAt,
       })),
     ]);
 

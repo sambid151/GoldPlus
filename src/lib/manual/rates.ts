@@ -105,7 +105,7 @@ export async function saveRows(
   }
 
   const out: DailyClose[] = rows.flatMap((row) =>
-    KARATS.flatMap((k) => (row.prices[k] !== undefined ? [{ karat: k, date: row.date, pricePerGram: row.prices[k]!, source: opts.source }] : [])),
+    KARATS.flatMap((k) => (row.prices[k] !== undefined ? [{ karat: k, date: row.date, pricePerGram: row.prices[k]!, source: opts.source, updatedAt: now.toISOString() }] : [])),
   );
   await repo.upsertDailyCloses(out);
 

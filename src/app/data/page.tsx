@@ -24,6 +24,7 @@ function groupDays(closes: DailyClose[]): DayRow[] {
   for (const c of closes) {
     const d = days.get(c.date) ?? { date: c.date, prices: {} as Partial<Record<Karat, number>>, source: c.source };
     d.prices[c.karat] = c.pricePerGram;
+    if (c.updatedAt && (!d.updatedAt || c.updatedAt > d.updatedAt)) d.updatedAt = c.updatedAt;
     days.set(c.date, d);
   }
   return [...days.values()].sort((a, b) => b.date.localeCompare(a.date));

@@ -6,6 +6,7 @@ import { getFreshness, type FreshnessStatus } from "@/lib/ingest/status";
 import { getRateProvider } from "@/lib/providers";
 import { getRepository } from "@/lib/repo";
 import { istDate } from "@/lib/time";
+import { lastUpdateFor, shouldNudgeAfternoon, updatesOn, type UpdateEntry } from "@/lib/update-time";
 import { KARATS, type DailyClose, type Karat } from "@/lib/types";
 
 export interface RateCardData {
@@ -28,6 +29,14 @@ export interface DashboardData {
   today: string;
   /** Whole days between the newest stored rate and today (0 = up to date). */
   daysBehind: number;
+  /** When the newest rate was last written (ISO), or null for very old entries. */
+  lastUpdatedAt: string | null;
+  /** Price changes recorded on the newest date, oldest first. */
+  updatesToday: UpdateEntry[];
+  /** Server time for this render (ISO), used for "x hours ago". */
+  nowIso: string;
+  /** True when today's rate is from the morning and it is now afternoon. */
+  nudgeAfternoon: boolean;
 }
 
 /** Whole days from `from` to `to` (YYYY-MM-DD, both calendar dates). Negative if `to` is earlier. */
@@ -73,7 +82,7 @@ export const getDashboardData = cache(async (): Promise<DashboardData> => {
   // Stored data and "now" are per-request values: opt out of prerendering explicitly.
   await connection();
   const repo = getRepository();
-  const [closes, state] = await Promise.all([repo.getDailyCloses(), repo.getIngestState()]);
+  const [closes, state, snapshots] = await Promise.all([repo.getDailyCloses(), repo.getIngestState(), repo.getSnapshots()]);
   const now = new Date();
   if (refreshEnabled() && shouldRefresh(state, now, refreshIntervalMinutes())) {
     // Claim the slot first so concurrent views do not all refresh, then ingest after the response.
@@ -91,7 +100,12 @@ export const getDashboardData = cache(async (): Promise<DashboardData> => {
   const cards = KARATS.flatMap((k) => (latest[k] ? [buildCard(k, latest[k]!, closes)] : []));
   const latestDate = cards.map((c) => c.date).sort().at(-1) ?? null;
   const today = istDate(now);
+  const lastUpdatedAt = latestDate ? lastUpdateFor(latestDate, closes, snapshots) : null;
   return {
+    lastUpdatedAt,
+    updatesToday: latestDate ? updatesOn(latestDate, snapshots) : [],
+    nowIso: now.toISOString(),
+    nudgeAfternoon: latestDate === today && shouldNudgeAfternoon(lastUpdatedAt, now),
     cards,
     freshness: getFreshness(state, now),
     closes,

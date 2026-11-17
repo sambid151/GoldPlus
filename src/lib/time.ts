@@ -42,3 +42,29 @@ export function addDays(date: string, days: number): string {
   const t = new Date(Date.UTC(y, m - 1, d + days));
   return t.toISOString().slice(0, 10);
 }
+
+/** e.g. "3:42 pm" in IST. */
+export function formatTimeIst(instant: Date | string): string {
+  const d = typeof instant === "string" ? new Date(instant) : instant;
+  return new Intl.DateTimeFormat("en-IN", { timeZone: IST_TZ, hour: "numeric", minute: "2-digit", hour12: true }).format(d);
+}
+
+/** Hour of day (0-23) in IST. */
+export function istHour(instant: Date | string): number {
+  const d = typeof instant === "string" ? new Date(instant) : instant;
+  const h = new Intl.DateTimeFormat("en-GB", { timeZone: IST_TZ, hour: "2-digit", hour12: false }).format(d);
+  return Number(h) % 24;
+}
+
+/** "just now", "12 minutes ago", "3 hours ago", "2 days ago". */
+export function formatAgo(from: Date | string, now: Date | string = new Date()): string {
+  const ms = new Date(now).getTime() - new Date(from).getTime();
+  if (!(ms >= 0)) return "just now";
+  const min = Math.floor(ms / 60_000);
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} minute${min === 1 ? "" : "s"} ago`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h} hour${h === 1 ? "" : "s"} ago`;
+  const d = Math.floor(h / 24);
+  return `${d} day${d === 1 ? "" : "s"} ago`;
+}

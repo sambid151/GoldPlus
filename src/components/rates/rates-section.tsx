@@ -3,7 +3,9 @@ import { publicErrorMessage } from "@/lib/errors";
 import { getSite } from "@/lib/site";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { Section } from "@/components/ui/section";
+import { formatIst } from "@/lib/time";
 import { EstimateNotice } from "./estimate-notice";
+import { UpdateLog } from "./update-log";
 import { RateCards } from "./rate-cards";
 import { RateTable } from "./rate-table";
 
@@ -38,7 +40,7 @@ export async function RatesSection() {
     );
   }
 
-  const { cards, closes } = data;
+  const { cards, closes, lastUpdatedAt, updatesToday } = data;
   return (
     <Section
       id="rates"
@@ -46,7 +48,7 @@ export async function RatesSection() {
       description={
         getSite().estimate
           ? "Price per gram, updated about every 15 minutes while the page is in use."
-          : "Price per gram. The source publishes once a day."
+          : `Price per gram. ${lastUpdatedAt ? `Last updated ${formatIst(lastUpdatedAt)}.` : "Update time not recorded."}`
       }
     >
       {cards.length === 0 ? (
@@ -56,6 +58,7 @@ export async function RatesSection() {
       ) : (
         <>
           {getSite().estimate ? <EstimateNotice /> : null}
+          <UpdateLog updates={updatesToday} />
           <RateCards cards={cards} closes={closes} />
           <RateTable cards={cards} />
         </>

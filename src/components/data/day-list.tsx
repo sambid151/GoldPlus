@@ -4,13 +4,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { deleteDayAction } from "@/app/data/actions";
 import { formatRupees } from "@/lib/format";
-import { formatShortDate } from "@/lib/time";
+import { formatIst, formatShortDate } from "@/lib/time";
 import { KARATS, type Karat } from "@/lib/types";
 
 export interface DayRow {
   date: string;
   prices: Partial<Record<Karat, number>>;
   source: string;
+  /** ISO time last saved, if recorded. */
+  updatedAt?: string;
 }
 
 export function DayList({ days }: { days: DayRow[] }) {
@@ -19,13 +21,14 @@ export function DayList({ days }: { days: DayRow[] }) {
   if (days.length === 0) return <p className="text-sm text-muted">No days stored yet. Add one above.</p>;
   return (
     <div className="overflow-x-auto rounded-xl border border-line">
-      <table className="w-full min-w-[34rem] text-left text-sm">
+      <table className="w-full min-w-[44rem] text-left text-sm">
         <caption className="sr-only">Stored daily rates, newest first</caption>
         <thead className="bg-surface text-muted">
           <tr>
             <th scope="col" className="px-3 py-2 font-medium">Date</th>
             {KARATS.map((k) => <th key={k} scope="col" className="px-3 py-2 text-right font-medium">{k}</th>)}
             <th scope="col" className="px-3 py-2 font-medium">Source</th>
+            <th scope="col" className="px-3 py-2 font-medium">Last updated</th>
             <th scope="col" className="px-3 py-2 text-right font-medium">Actions</th>
           </tr>
         </thead>
@@ -37,6 +40,7 @@ export function DayList({ days }: { days: DayRow[] }) {
                 <td key={k} className="num px-3 py-2 text-right">{d.prices[k] ? formatRupees(d.prices[k]!) : "—"}</td>
               ))}
               <td className="px-3 py-2 text-muted">{d.source}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-muted">{d.updatedAt ? formatIst(d.updatedAt) : "not recorded"}</td>
               <td className="px-3 py-2">
                 <div className="flex justify-end gap-2">
                   <Link href={`/data?date=${d.date}#add`} className="inline-flex min-h-9 items-center rounded-lg border border-line px-3 font-medium hover:bg-brand-soft">

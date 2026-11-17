@@ -30,6 +30,8 @@ export interface DailyClose {
   date: string;
   pricePerGram: number;
   source: string;
+  /** ISO time this price was last written (saved, imported or ingested). Absent on older entries. */
+  updatedAt?: string;
 }
 
 export interface Snapshot extends Rate {

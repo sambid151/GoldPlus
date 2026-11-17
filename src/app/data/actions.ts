@@ -8,7 +8,7 @@ import { checkRows, deleteDay, saveRows, type RowCheck } from "@/lib/manual/rate
 import { parseRupees } from "@/lib/providers/goodreturns-parser";
 import { getRepository } from "@/lib/repo";
 import { isHosted, isLocalHost } from "@/lib/runtime";
-import { istDate } from "@/lib/time";
+import { formatTimeIst, istDate } from "@/lib/time";
 import { KARATS, type Karat } from "@/lib/types";
 
 const MAX_UPLOAD_BYTES = 900_000; // stay under the 1 MB Server Action body limit
@@ -93,7 +93,7 @@ export async function saveRateAction(_prev: FormState, formData: FormData): Prom
   });
   if (outcome.ok) {
     revalidateAll();
-    return { status: "saved", message: `Saved the rates for ${date}.`, values: { date: istDate(), "24K": "", "22K": "", "18K": "" } };
+    return { status: "saved", message: `Saved the rates for ${date} at ${formatTimeIst(new Date())} IST.`, values: { date: istDate(), "24K": "", "22K": "", "18K": "" } };
   }
 
   const row = outcome.check.rows[0];

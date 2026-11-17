@@ -88,7 +88,14 @@ export async function Hero() {
           {estimate || !data.latestDate ? (
             <FreshnessBadge freshness={data.freshness} />
           ) : (
-            <DayStatus latestDate={data.latestDate} daysBehind={data.daysBehind} canAdd={!isHosted()} />
+            <DayStatus
+              latestDate={data.latestDate}
+              daysBehind={data.daysBehind}
+              lastUpdatedAt={data.lastUpdatedAt}
+              nowIso={data.nowIso}
+              nudgeAfternoon={data.nudgeAfternoon}
+              canAdd={!isHosted()}
+            />
           )}
         </div>
       ) : (
