@@ -15,6 +15,8 @@ export function getRateProvider(): RateProvider {
     throw new Error(`RATE_PROVIDER="${name}" is for personal local use only and is blocked on hosted deployments. Use "spot-estimate" or "licensed".`);
   }
   switch (name) {
+    case "published":
+      throw new Error("Published mode is read-only: there is no live rate source to ingest from.");
     case "spot-estimate":
       return new SpotEstimateProvider();
     case "licensed":

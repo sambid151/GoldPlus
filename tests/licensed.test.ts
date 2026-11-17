@@ -126,9 +126,11 @@ describe("getRateProvider on hosted deployments", () => {
       expect(() => getRateProvider()).toThrow(/personal local use only/);
     }
   });
-  it("defaults to the keyless spot estimate when hosted, and to saved-html locally", () => {
+  it("never defaults to the spot estimate: hosted is read-only published, local is saved-html", () => {
     vi.stubEnv("RATE_PROVIDER", "");
     vi.stubEnv("VERCEL", "1");
+    expect(() => getRateProvider()).toThrow(/read-only/);
+    vi.stubEnv("RATE_PROVIDER", "spot-estimate"); // only when asked for explicitly
     expect(getRateProvider().id).toBe("spot-estimate");
     vi.stubEnv("RATE_PROVIDER", "licensed");
     vi.stubEnv("LICENSED_API_URL", "");

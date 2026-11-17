@@ -2,7 +2,7 @@ import { connection, NextResponse } from "next/server";
 import { runIngest } from "@/lib/ingest/ingest";
 import { getRateProvider } from "@/lib/providers";
 import { getRepository } from "@/lib/repo";
-import { isHosted, isLocalHost } from "@/lib/runtime";
+import { isHosted, isLocalHost, isPublishedMode } from "@/lib/runtime";
 
 /**
  * Scheduled ingest. Vercel Cron sends `Authorization: Bearer $CRON_SECRET`.
@@ -11,6 +11,8 @@ import { isHosted, isLocalHost } from "@/lib/runtime";
 export async function GET(request: Request) {
   // Mark the route dynamic before any side effect so `next build` never triggers an ingest.
   await connection();
+  // Published (read-only) mode has no store or live source: this endpoint does not exist for visitors.
+  if (isPublishedMode()) return new Response("Not found", { status: 404 });
 
   const secret = process.env.CRON_SECRET;
   if (!secret && isHosted()) {

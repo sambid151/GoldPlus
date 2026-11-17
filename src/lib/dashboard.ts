@@ -5,6 +5,8 @@ import { refreshEnabled, refreshIntervalMinutes, shouldRefresh } from "@/lib/ing
 import { getFreshness, type FreshnessStatus } from "@/lib/ingest/status";
 import { getRateProvider } from "@/lib/providers";
 import { getRepository } from "@/lib/repo";
+import { getPublishedRepository } from "@/lib/published/repository";
+import { isPublishedMode } from "@/lib/runtime";
 import { istDate } from "@/lib/time";
 import { lastUpdateFor, shouldNudgeAfternoon, updatesOn, type UpdateEntry } from "@/lib/update-time";
 import { KARATS, type DailyClose, type Karat } from "@/lib/types";
@@ -37,6 +39,8 @@ export interface DashboardData {
   nowIso: string;
   /** True when today's rate is from the morning and it is now afternoon. */
   nudgeAfternoon: boolean;
+  /** When the published snapshot was generated (ISO); null outside published mode. */
+  publishedAt: string | null;
 }
 
 /** Whole days from `from` to `to` (YYYY-MM-DD, both calendar dates). Negative if `to` is earlier. */
@@ -105,6 +109,7 @@ export const getDashboardData = cache(async (): Promise<DashboardData> => {
     lastUpdatedAt,
     updatesToday: latestDate ? updatesOn(latestDate, snapshots) : [],
     nowIso: now.toISOString(),
+    publishedAt: isPublishedMode() ? getPublishedRepository().generatedAt : null,
     nudgeAfternoon: latestDate === today && shouldNudgeAfternoon(lastUpdatedAt, now),
     cards,
     freshness: getFreshness(state, now),

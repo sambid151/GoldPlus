@@ -1,5 +1,5 @@
 import { CalendarCheck, CalendarClock, Clock } from "lucide-react";
-import { formatAgo, formatShortDate, formatTimeIst } from "@/lib/time";
+import { formatAgo, formatIst, formatShortDate, formatTimeIst } from "@/lib/time";
 
 interface Props {
   latestDate: string;
@@ -11,10 +11,12 @@ interface Props {
   nudgeAfternoon: boolean;
   /** Show the "add today's rate" link (local use only). */
   canAdd: boolean;
+  /** Set when the page serves a published snapshot: when that snapshot was generated. */
+  publishedAt?: string | null;
 }
 
 /** Says which day the shown rate belongs to, exactly when it was last updated, and nudges when it may be out of date. */
-export function DayStatus({ latestDate, daysBehind, lastUpdatedAt, nowIso, nudgeAfternoon, canAdd }: Props) {
+export function DayStatus({ latestDate, daysBehind, lastUpdatedAt, nowIso, nudgeAfternoon, canAdd, publishedAt }: Props) {
   const label = `${formatShortDate(latestDate)} ${latestDate.slice(0, 4)}`;
   const updated = lastUpdatedAt ? (
     <>
@@ -23,6 +25,36 @@ export function DayStatus({ latestDate, daysBehind, lastUpdatedAt, nowIso, nudge
   ) : (
     "Update time not recorded"
   );
+
+  if (publishedAt) {
+    // Published snapshot: say exactly which day it is, never imply it is live, and warn when it is old.
+    const old = daysBehind > 0;
+    return (
+      <div className="space-y-2">
+        <p
+          className={`inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl px-3 py-1.5 text-sm ${
+            old ? "border border-down/40 bg-warn-bg text-warn-ink" : "bg-brand-soft text-brand-strong"
+          }`}
+        >
+          {old ? <CalendarClock aria-hidden="true" className="size-4" /> : <CalendarCheck aria-hidden="true" className="size-4" />}
+          <span>
+            Rate dated <time dateTime={latestDate}>{label}</time>
+          </span>
+          <span aria-hidden="true">·</span>
+          <Clock aria-hidden="true" className="size-4" />
+          <span>{updated}</span>
+        </p>
+        {old ? (
+          <p role="status" className="text-sm text-on-band">
+            This is the latest published rate and it is {daysBehind} day{daysBehind === 1 ? "" : "s"} old. Current prices may be different.
+          </p>
+        ) : null}
+        <p className="text-xs text-on-band-muted">
+          Published snapshot, generated <time dateTime={publishedAt}>{formatIst(publishedAt)}</time>. Rates are saved by the site owner, not live.
+        </p>
+      </div>
+    );
+  }
 
   if (daysBehind === 0) {
     return (

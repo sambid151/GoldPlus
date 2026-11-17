@@ -1,11 +1,12 @@
 import { isHosted } from "@/lib/runtime";
+import { getPublishedRepository } from "@/lib/published/repository";
 import type { RateRepository } from "./types";
 import { FileRateRepository } from "./file-repository";
 import { SupabaseRateRepository } from "./supabase-repository";
 
 let instance: RateRepository | undefined;
 
-/** Supabase when configured. A local JSON file is allowed only off-platform (dev). */
+/** Supabase when configured; hosted without it serves the read-only published snapshot; local uses the JSON file. */
 export function getRepository(): RateRepository {
   if (instance) return instance;
   const url = process.env.SUPABASE_URL;
@@ -13,7 +14,8 @@ export function getRepository(): RateRepository {
   if (url && key) {
     instance = new SupabaseRateRepository(url, key);
   } else if (isHosted()) {
-    throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required on hosted deployments (the filesystem is ephemeral).");
+    // Hosted without a database: serve the bundled read-only snapshot, never an estimate.
+    instance = getPublishedRepository();
   } else {
     instance = new FileRateRepository();
   }

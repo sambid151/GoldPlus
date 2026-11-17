@@ -24,6 +24,21 @@ Backups: `npm run backup` copies the data file to `.data/backups/` (timestamped,
 
 Data-safety notes: writes go to a temp file and are renamed into place, a corrupt data file is never overwritten (the screen shows an error instead), and deletes need a second click. Exports contain daily prices only (not the change-detection snapshots or ingest state). Saving or importing a date that already exists **replaces** it (the preview says so). Do not run `npm run poll`/`ingest` while saving from the screen: the two processes do not lock each other.
 
+## Publishing a read-only copy (Vercel, no database)
+
+Your rates live in `.data/goldpulse.json` on your computer, which a hosted site cannot see. To show them online without a database:
+
+```bash
+npm run publish:snapshot     # reads .data/goldpulse.json, writes published/snapshot.json
+git diff published/snapshot.json   # review exactly what will be published
+git add published/snapshot.json && git commit -m "chore: publish rates snapshot" && git push
+```
+
+- The snapshot holds only retail Bhubaneswar prices (`karat`, `date`, `pricePerGram`, `source`, save times). Ingest state, file paths, other data series (such as the spot estimate) and any extra field are never copied, and the file is rejected at load if it contains unexpected fields.
+- On Vercel (no Supabase variables) the site serves that file read-only. It says "Bhubaneswar Gold Rates", shows the rate's date and save time, labels itself a published snapshot with its generation time, and warns when the newest rate is not from today. It never shows the India spot estimate unless you set `RATE_PROVIDER=spot-estimate` yourself.
+- `/data`, saving, exports and the cron endpoint are disabled for visitors. Update the site by re-running the commands above after you add rates locally.
+- Setting both `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` switches hosted mode to Supabase instead (see below). Capabilities that need Supabase: saving rates from the hosted site, scheduled ingests, and update times stored online.
+
 ## Data sources and limits
 
 - **Manual, pasted and imported rates** are the default and the only fully permitted path found. Different sites show slightly different Bhubaneswar rates (on 16 Nov 2026: Goodreturns and Groww ₹13,680, Paytm ₹13,847 for 24K). Use one source consistently; GoldPulse keeps one series and refuses to mix a different one into the same data file.

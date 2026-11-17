@@ -13,3 +13,11 @@ export function isLocalHost(hostHeader: string | null | undefined): boolean {
   const host = hostHeader.trim().toLowerCase().replace(/:\d+$/, "");
   return host === "localhost" || host === "127.0.0.1" || host === "[::1]" || host === "::1";
 }
+
+/**
+ * Hosted without a database: the app serves the bundled read-only snapshot (published/snapshot.json)
+ * and never falls back to an estimate. Setting both Supabase variables switches to Supabase instead.
+ */
+export function isPublishedMode(env: NodeJS.ProcessEnv = process.env): boolean {
+  return isHosted(env) && !(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY);
+}

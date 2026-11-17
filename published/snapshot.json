@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "location": "Bhubaneswar",
+  "generatedAt": "2026-11-17T04:40:43.935Z",
+  "note": "Rates saved by the site owner in GoldPulse and published as a read-only snapshot. Not live; not investment advice.",
+  "dailyCloses": [
+    {
+      "karat": "22K",
+      "date": "2026-11-07",
+      "pricePerGram": 13160,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-07",
+      "pricePerGram": 14357,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-08",
+      "pricePerGram": 13160,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-08",
+      "pricePerGram": 14357,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-09",
+      "pricePerGram": 13255,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-09",
+      "pricePerGram": 14460,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-10",
+      "pricePerGram": 13080,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-10",
+      "pricePerGram": 14269,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-11",
+      "pricePerGram": 13015,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-11",
+      "pricePerGram": 14198,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-12",
+      "pricePerGram": 12815,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-12",
+      "pricePerGram": 13980,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-13",
+      "pricePerGram": 12590,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-13",
+      "pricePerGram": 13735,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-14",
+      "pricePerGram": 12615,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-14",
+      "pricePerGram": 13762,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-15",
+      "pricePerGram": 12615,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-15",
+      "pricePerGram": 13762,
+      "source": "saved-html"
+    },
+    {
+      "karat": "18K",
+      "date": "2026-11-16",
+      "pricePerGram": 10260,
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-16",
+      "pricePerGram": 12540,
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-16",
+      "pricePerGram": 13680,
+      "source": "saved-html"
+    }
+  ],
+  "snapshots": [
+    {
+      "karat": "18K",
+      "date": "2026-11-16",
+      "pricePerGram": 10260,
+      "fetchedAt": "2026-11-16T10:49:54.948Z",
+      "source": "saved-html"
+    },
+    {
+      "karat": "22K",
+      "date": "2026-11-16",
+      "pricePerGram": 12540,
+      "fetchedAt": "2026-11-16T10:49:54.948Z",
+      "source": "saved-html"
+    },
+    {
+      "karat": "24K",
+      "date": "2026-11-16",
+      "pricePerGram": 13680,
+      "fetchedAt": "2026-11-16T10:49:54.948Z",
+      "source": "saved-html"
+    }
+  ]
+}

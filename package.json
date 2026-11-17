@@ -10,6 +10,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "backup": "node scripts/backup.mjs",
+    "publish:snapshot": "tsx scripts/publish-snapshot.ts",
     "poll": "tsx --env-file-if-exists=.env.local scripts/poll.ts",
     "ingest": "tsx --env-file-if-exists=.env.local scripts/poll.ts --once"
   },

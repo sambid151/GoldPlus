@@ -18,13 +18,16 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function headline(site: ReturnType<typeof getSite>): string {
+  if (site.published) return `${site.location} Gold Rates`;
+  return site.estimate ? `${site.location} gold price today (estimate)` : `Gold price today in ${site.location}`;
+}
+
 export function HeroFallback() {
-  const { location, estimate } = getSite();
+  const site = getSite();
   return (
     <Shell>
-      <h1 className="text-xl font-semibold text-on-band sm:text-2xl">
-        {estimate ? `${location} gold price today (estimate)` : `Gold price today in ${location}`}
-      </h1>
+      <h1 className="text-xl font-semibold text-on-band sm:text-2xl">{headline(site)}</h1>
       <div aria-busy="true" aria-label="Loading price…" className="mt-6 space-y-4">
         <div className="skeleton h-16 w-64 opacity-30" />
         <div className="skeleton h-6 w-48 opacity-30" />
@@ -53,7 +56,8 @@ function Move({ card }: { card: RateCardData }) {
 }
 
 export async function Hero() {
-  const { location, estimate } = getSite();
+  const site = getSite();
+  const { estimate } = site;
   let data;
   try {
     data = await getDashboardData();
@@ -65,9 +69,7 @@ export async function Hero() {
 
   return (
     <Shell>
-      <h1 className="text-xl font-semibold text-on-band sm:text-2xl">
-        {estimate ? `${location} gold price today (estimate)` : `Gold price today in ${location}`}
-      </h1>
+      <h1 className="text-xl font-semibold text-on-band sm:text-2xl">{headline(site)}</h1>
       {main && data ? (
         <div className="mt-5 space-y-4">
           <p className="num text-6xl font-semibold tracking-tight text-on-band sm:text-7xl">
@@ -95,6 +97,7 @@ export async function Hero() {
               nowIso={data.nowIso}
               nudgeAfternoon={data.nudgeAfternoon}
               canAdd={!isHosted()}
+              publishedAt={data.publishedAt}
             />
           )}
         </div>
